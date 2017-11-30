@@ -78,11 +78,11 @@ function requestHandler(request, response) {
 
       if (params.has('extra_header')) {
         const extraHeaders = new URLSearchParams(params.get('extra_header'));
-        extraHeaders.forEach((headerValue, headerName) => {
+        for (const [headerName, headerValue] of extraHeaders) {
           if (HEADER_SAFELIST.has(headerName.toLowerCase())) {
             headers[headerName] = headerValue;
           }
-        });
+        }
       }
 
       // redirect url to new url if present
