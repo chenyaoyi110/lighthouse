@@ -107,6 +107,9 @@ URL.elideDataURI = function elideDataURI(url) {
 // As a result, the network URL (chrome://chrome/settings/) doesn't match the final document URL (chrome://settings/).
 function rewriteChromeInternalUrl(url) {
   if (!url || !url.startsWith('chrome://')) return url;
+  // Chrome adds a trailing slash to `chrome://` URLs, but the spec does not.
+  //   https://github.com/GoogleChrome/lighthouse/pull/3941#discussion_r154026009
+  if (url.endsWith('/')) url = url.replace(/\/$/, '');
   return url.replace(/^chrome:\/\/chrome\//, 'chrome://');
 }
 

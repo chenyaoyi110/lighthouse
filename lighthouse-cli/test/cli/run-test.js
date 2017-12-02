@@ -23,7 +23,7 @@ const getFlags = require('../../cli-flags').getFlags;
 
 describe('CLI run', function() {
   it('runLighthouse completes a LH round trip', () => {
-    const url = 'chrome://version/';
+    const url = 'chrome://version';
     const filename = path.join(process.cwd(), 'run.ts.results.json');
     const flags = getFlags(`--output=json --output-path=${filename} ${url}`);
     return run.runLighthouse(url, flags, fastConfig).then(passedResults => {
