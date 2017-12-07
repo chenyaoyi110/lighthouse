@@ -18,9 +18,10 @@ class UnminifiedJavaScript extends ByteEfficiencyAudit {
   static get meta() {
     return {
       name: 'unminified-javascript',
-      description: 'Unminified JavaScript',
+      description: 'Minify JavaScript',
       informative: true,
-      helpText: 'Minify JavaScript to save network bytes.',
+      helpText: 'Minifying JavaScript files can reduce payload sizes and script parse time.' +
+        '[Learn more](https://developers.google.com/speed/docs/insights/MinifyResources).',
       requiredArtifacts: ['Scripts', 'devtoolsLogs'],
     };
   }
@@ -31,21 +32,16 @@ class UnminifiedJavaScript extends ByteEfficiencyAudit {
    */
   static computeWaste(scriptContent, networkRecord) {
     const contentLength = scriptContent.length;
-    let tokenLength = 0;
-    let tokenLengthWithMangling = 0;
+    let totalTokenLength = 0;
 
     const tokens = esprima.tokenize(scriptContent);
     for (const token of tokens) {
-      tokenLength += token.value.length;
-      // assume all identifiers could be reduced to a single character
-      tokenLengthWithMangling += token.type === 'Identifier' ? 1 : token.value.length;
+      totalTokenLength += token.value.length;
     }
-
-    if (1 - tokenLength / contentLength < IGNORE_THRESHOLD_IN_PERCENT) return null;
 
     const totalBytes = ByteEfficiencyAudit.estimateTransferSize(networkRecord, contentLength,
       'script');
-    const wastedRatio = 1 - (tokenLength + tokenLengthWithMangling) / (2 * contentLength);
+    const wastedRatio = 1 - totalTokenLength / contentLength;
     const wastedBytes = Math.round(totalBytes * wastedRatio);
 
     return {
@@ -61,15 +57,17 @@ class UnminifiedJavaScript extends ByteEfficiencyAudit {
    * @return {!Audit.HeadingsResult}
    */
   static audit_(artifacts, networkRecords) {
-    const scriptsByUrl = artifacts.Scripts;
-
     const results = [];
-    for (const [url, scriptContent] of scriptsByUrl.entries()) {
+    for (const [url, scriptContent] of artifacts.Scripts.entries()) {
       const networkRecord = networkRecords.find(record => record.url === url);
       if (!networkRecord || !scriptContent) continue;
 
       const result = UnminifiedJavaScript.computeWaste(scriptContent, networkRecord);
-      if (!result || result.wastedBytes < IGNORE_THRESHOLD_IN_BYTES) continue;
+
+      // If the ratio is minimal, the file is likely already minified, so ignore it.
+      // If the total number of bytes to be saved is quite small, it's also safe to ignore.
+      if (result.wastedRatio < IGNORE_THRESHOLD_IN_PERCENT ||
+          result.wastedBytes < IGNORE_THRESHOLD_IN_BYTES) continue;
       results.push(result);
     }
 

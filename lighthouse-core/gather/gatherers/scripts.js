@@ -9,7 +9,7 @@ const Gatherer = require('./gatherer');
 const WebInspector = require('../../lib/web-inspector');
 
 /**
- * @fileoverview Gets JavaScript content
+ * @fileoverview Gets JavaScript file content
  */
 class Scripts extends Gatherer {
   /**
@@ -22,13 +22,13 @@ class Scripts extends Gatherer {
 
     const scriptContentMap = new Map();
     const scriptRecords = traceData.networkRecords
-      .filter(record => record.resourceType() === WebInspector.resourceTypes.Script)
+      .filter(record => record.resourceType() === WebInspector.resourceTypes.Script);
 
     return scriptRecords.reduce((promise, record) => {
       return promise
         .then(() => {
           return driver.getRequestContent(record.requestId)
-            .catch(err => null)
+            .catch(_ => null)
             .then(content => {
               if (!content) return;
               scriptContentMap.set(record.url, content);
