@@ -12,24 +12,24 @@ module.exports = {
   passes: [{
     passName: 'defaultPass',
     recordTrace: true,
-    pauseAfterLoadMs: 5250,
-    networkQuietThresholdMs: 5250,
-    cpuQuietThresholdMs: 5250,
+    pauseAfterLoadMs: 0,
+    networkQuietThresholdMs: 500,
+    cpuQuietThresholdMs: 500,
     useThrottling: true,
     gatherers: [
-      'url',
+      'dobetterweb/domstats',
+      'chrome-console-messages',
+      /* 'url',
       'viewport',
       'viewport-dimensions',
       'theme-color',
       'manifest',
       'runtime-exceptions',
-      'chrome-console-messages',
       'image-usage',
       'accessibility',
       'dobetterweb/all-event-listeners',
       'dobetterweb/anchors-with-no-rel-noopener',
       'dobetterweb/appcache',
-      'dobetterweb/domstats',
       'dobetterweb/js-libraries',
       'dobetterweb/optimized-images',
       'dobetterweb/password-inputs-with-prevented-paste',
@@ -39,9 +39,9 @@ module.exports = {
       'seo/meta-description',
       'seo/crawlable-links',
       'seo/meta-robots',
-      'seo/hreflang',
+      'seo/hreflang', */
     ],
-  },
+  }/* ,
   {
     passName: 'offlinePass',
     useThrottling: false,
@@ -64,9 +64,9 @@ module.exports = {
       'http-redirect',
       'html-without-javascript',
     ],
-  }],
+  } */],
   audits: [
-    'is-on-https',
+    /* 'is-on-https',
     'redirects-http',
     'service-worker',
     'works-offline',
@@ -148,9 +148,9 @@ module.exports = {
     'byte-efficiency/uses-optimized-images',
     'byte-efficiency/uses-request-compression',
     'byte-efficiency/uses-responsive-images',
-    'dobetterweb/appcache-manifest',
+    'dobetterweb/appcache-manifest',  */
     'dobetterweb/dom-size',
-    'dobetterweb/external-anchors-use-rel-noopener',
+    /* 'dobetterweb/external-anchors-use-rel-noopener',
     'dobetterweb/geolocation-on-start',
     'dobetterweb/link-blocking-first-paint',
     'dobetterweb/no-document-write',
@@ -166,23 +166,23 @@ module.exports = {
     'seo/http-status-code',
     'seo/link-text',
     'seo/is-crawlable',
-    'seo/hreflang',
+    'seo/hreflang', */
   ],
 
   groups: {
-    'perf-metric': {
+    /* 'perf-metric': {
       title: 'Metrics',
       description: 'These metrics encapsulate your app\'s performance across a number of dimensions.',
     },
     'perf-hint': {
       title: 'Opportunities',
       description: 'These are opportunities to speed up your application by optimizing the following resources.',
-    },
+    }, */
     'perf-info': {
       title: 'Diagnostics',
       description: 'More information about the performance of your application.',
     },
-    'a11y-color-contrast': {
+    /* 'a11y-color-contrast': {
       title: 'Color Contrast Is Satisfactory',
       description: 'These are opportunities to improve the legibility of your content.',
     },
@@ -223,10 +223,10 @@ module.exports = {
       description: 'These checks are required by the baseline ' +
           '[PWA Checklist](https://developers.google.com/web/progressive-web-apps/checklist) but are ' +
           'not automatically checked by Lighthouse. They do not affect your score but it\'s important that you verify them manually.',
-    },
+    }, */
   },
   categories: {
-    'pwa': {
+    /* 'pwa': {
       name: 'Progressive Web App',
       weight: 1,
       description: 'These checks validate the aspects of a Progressive Web App, as specified by the baseline [PWA Checklist](https://developers.google.com/web/progressive-web-apps/checklist).',
@@ -246,12 +246,13 @@ module.exports = {
         {id: 'pwa-page-transitions', weight: 0, group: 'manual-pwa-checks'},
         {id: 'pwa-each-page-has-url', weight: 0, group: 'manual-pwa-checks'},
       ],
-    },
+    }, */
     'performance': {
       name: 'Performance',
       description: 'These encapsulate your app\'s current performance and opportunities to improve it.',
       audits: [
-        {id: 'first-meaningful-paint', weight: 5, group: 'perf-metric'},
+        {id: 'dom-size', weight: 0, group: 'perf-info'},
+        /* {id: 'first-meaningful-paint', weight: 5, group: 'perf-metric'},
         {id: 'first-interactive', weight: 5, group: 'perf-metric'},
         {id: 'consistently-interactive', weight: 5, group: 'perf-metric'},
         {id: 'speed-index-metric', weight: 1, group: 'perf-metric'},
@@ -267,15 +268,14 @@ module.exports = {
         {id: 'redirects', weight: 0, group: 'perf-hint'},
         {id: 'total-byte-weight', weight: 0, group: 'perf-info'},
         {id: 'uses-long-cache-ttl', weight: 0, group: 'perf-info'},
-        {id: 'dom-size', weight: 0, group: 'perf-info'},
         {id: 'critical-request-chains', weight: 0, group: 'perf-info'},
         {id: 'user-timings', weight: 0, group: 'perf-info'},
         {id: 'bootup-time', weight: 0, group: 'perf-info'},
         {id: 'screenshot-thumbnails', weight: 0},
-        {id: 'mainthread-work-breakdown', weight: 0, group: 'perf-info'},
+        {id: 'mainthread-work-breakdown', weight: 0, group: 'perf-info'}, */
       ],
     },
-    'accessibility': {
+    /* 'accessibility': {
       name: 'Accessibility',
       description: 'These checks highlight opportunities to [improve the accessibility of your app](https://developers.google.com/web/fundamentals/accessibility). Only a subset of accessibility issues can be automatically detected so manual testing is also encouraged.',
       audits: [
@@ -325,8 +325,8 @@ module.exports = {
         {id: 'heading-levels', weight: 0, group: 'manual-a11y-checks'},
         {id: 'use-landmarks', weight: 0, group: 'manual-a11y-checks'},
       ],
-    },
-    'best-practices': {
+    }, */
+    /* 'best-practices': {
       name: 'Best Practices',
       description: 'We\'ve compiled some recommendations for modernizing your web app and avoiding performance pitfalls.',
       audits: [
@@ -347,6 +347,6 @@ module.exports = {
         {id: 'errors-in-console', weight: 1},
         {id: 'image-aspect-ratio', weight: 1},
       ],
-    },
+    }, */
   },
 };
